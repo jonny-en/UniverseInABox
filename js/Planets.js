@@ -1,8 +1,10 @@
-var sunMesh, earthMesh, cloudMesh, marsMesh, skyMesh, centerEarth, centerMars;
+var planets, sunMesh, earthMesh, cloudMesh, marsMesh, skyMesh, centerEarth, centerMars;
 function createPlanets(){
+  planets = new THREE.Object3D();
   createSun();
   createEarth();
   createMars();
+  scene.add(planets);
 }
 
 function createSun(){
@@ -47,7 +49,7 @@ function createEarth(){
   earthMesh.position.x = 40;
   earthMesh.add(cloudMesh);
   centerEarth.add(earthMesh);
-  scene.add(centerEarth);
+  planets.add(centerEarth);
 }
 
 function createMars(){
@@ -60,7 +62,7 @@ function createMars(){
   centerMars = new THREE.Object3D();
   marsMesh.position.x = 61;
   centerMars.add(marsMesh);
-  scene.add(centerMars);
+  planets.add(centerMars);
 
 }
 
@@ -68,8 +70,8 @@ function animatePlanets(){
   //Earth
   centerEarth.rotation.y += 0.005;
   earthMesh.rotation.y += 0.005;
-  cloudMesh.rotation.y -= 0.006;
-  cloudMesh.rotation.x -= 0.001;
+  cloudMesh.rotation.y -= 0.0055;
+  cloudMesh.rotation.x -= 0.0005;
 
   //Mars
   centerMars.rotation.y += 0.00405;

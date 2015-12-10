@@ -1,19 +1,18 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <title>Planetsystem</title>
+  <title>Planetensystem</title>
   <meta charset="utf-8">
 </head>
 <body style="margin: 0;">
 
   <script src="js/three.min.js"></script>
-  <script src="js/OrbitControls.js"></script>
   <script src="js/Planets.js"></script>
 
   <script>
 
   //Set up the scene, camera, and renderer as global variables.
-  var scene, camera, renderer
+  var scene, camera, renderer, raycaster, mouse;
 
   init();
   animate();
@@ -28,8 +27,9 @@
 
     //Camera
     camera = new THREE.PerspectiveCamera(45, WIDTH / HEIGHT, 0.1, 20000);
-    camera.position.set(0,80,0);
-    camera.rotation.x = 90;
+    camera.position.set(0,80, 0);
+    camera.lookAt(new THREE.Vector3( 0, 0, 0 ));
+    
     scene.add(camera);
 
     //Lights
@@ -43,7 +43,8 @@
     renderer = new THREE.WebGLRenderer({antialias:true});
     renderer.setSize(WIDTH, HEIGHT);
     document.body.appendChild(renderer.domElement);
-
+    document.addEventListener( 'mousedown', onDocumentMouseDown, false);
+  
     //Create an event listener that resizes the renderer with the browser window.
     window.addEventListener('resize', function() {
     var WIDTH = window.innerWidth,
@@ -53,7 +54,7 @@
     camera.updateProjectionMatrix();
   });
   
-  
+
   //create SkyMap
   var geometrySky = new THREE.SphereGeometry(5000, 32, 32);
   var materialSky = new THREE.MeshBasicMaterial({
@@ -67,8 +68,10 @@
   //create Planets
   createPlanets();
 
-  //Add OrbitalControls so that we can pan around with the mouse.
-  controls = new THREE.OrbitControls(camera, renderer.domElement);
+ 
+
+  raycaster = new THREE.Raycaster();
+  mouse = new THREE.Vector2();
 
   }
 
@@ -78,6 +81,27 @@
   renderer.render( scene, camera);
   controls.update();
  }
+
+ function onDocumentMouseDown(event) {
+      event.preventDefault();
+
+      mouse.x = ( event.clientX / window.innerWidth ) * 2 - 1;
+      mouse.y = - ( event.clientY / window.innerHeight ) * 2 + 1;
+
+      //Klickbare Planeten
+      raycaster.setFromCamera(mouse, camera);
+      var intersects = raycaster.intersectObjects([earthMesh, marsMesh]);
+      if(intersects.length > 0){
+        intersects[0].object.parent.updateMatrixWorld();
+        var vector = new THREE.Vector3();
+        vector.setFromMatrixPosition(intersects[0].object.matrixWorld);
+        camera.position.set(vector.x+3,vector.y,vector.z+3);
+        camera.lookAt(vector);
+        renderer.render(scene,camera);
+        THREE.SceneUtils.attach(camera,scene,intersects[0].object.parent);
+      }
+
+    }
 
   </script>
 
