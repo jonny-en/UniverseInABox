@@ -13,9 +13,8 @@ function createSun(){
     shininess:20,
     emissive: new THREE.Color('yellow'),
     map: THREE.ImageUtils.loadTexture('materials/sun.jpg'),
-
   });
-  sunMesh = new THREE.Mesh( geometry, material);
+  sunMesh = new THREE.Mesh(geometry, material);
   scene.add(sunMesh);
 }
 

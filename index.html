@@ -21,28 +21,31 @@
   //Sets up the the scene
   function init(){
 
-  //Create the scene and set the scene size.
+    //Create the scene and set the scene size.
     scene = new THREE.Scene();
     var WIDTH = window.innerWidth,
         HEIGHT = window.innerHeight;
 
-  //Help Axis, Delete later
-  var axisHelper = new THREE.AxisHelper( 5 );
-  scene.add( axisHelper );
+    //Camera
+    camera = new THREE.PerspectiveCamera(45, WIDTH / HEIGHT, 0.1, 20000);
+    camera.position.set(0,80,0);
+    camera.rotation.x = 90;
+    scene.add(camera);
 
-  //Create a renderer and add it to the DOM.
-  renderer = new THREE.WebGLRenderer({antialias:true});
-  renderer.setSize(WIDTH, HEIGHT);
-  document.body.appendChild(renderer.domElement);
+    //Lights
+    var light = new THREE.PointLight(0xffffff);
+    light.position.set(0,0,0);
+    scene.add(light);
+    var light2 = new THREE.AmbientLight( 0x404040 );
+    scene.add( light2 );
+    
+    //Renderer.
+    renderer = new THREE.WebGLRenderer({antialias:true});
+    renderer.setSize(WIDTH, HEIGHT);
+    document.body.appendChild(renderer.domElement);
 
-  //Create a camera, zoom it out from the model a bit, and add it to the scene.
-  camera = new THREE.PerspectiveCamera(45, WIDTH / HEIGHT, 0.1, 20000);
-  camera.position.set(0,80,0);
-  camera.rotation.x = 90;
-  scene.add(camera);
-
-  //Create an event listener that resizes the renderer with the browser window.
-  window.addEventListener('resize', function() {
+    //Create an event listener that resizes the renderer with the browser window.
+    window.addEventListener('resize', function() {
     var WIDTH = window.innerWidth,
         HEIGHT = window.innerHeight;
     renderer.setSize(WIDTH, HEIGHT);
@@ -50,12 +53,7 @@
     camera.updateProjectionMatrix();
   });
   
-  //Create a light, set its position, and add it to the scene.
-  var light = new THREE.PointLight(0xffffff);
-  light.position.set(0,0,0);
-  scene.add(light);
-  var light2 = new THREE.AmbientLight( 0x404040 );
-  scene.add( light2 );
+  
   //create SkyMap
   var geometrySky = new THREE.SphereGeometry(5000, 32, 32);
   var materialSky = new THREE.MeshBasicMaterial({
