@@ -56,13 +56,10 @@ function createMars(){
   //create sphere
   var geometry = new THREE.SphereGeometry(0.53,32,32);
   var material = new THREE.MeshPhongMaterial({
-    
     map : THREE.ImageUtils.loadTexture('materials/marsmap1k.jpg'),
-    bumpMap : THREE.ImageUtils.loadTexture('materials/marsbump1k.jpg'),
-    bumpScale : 0.03,
-    specularMap : THREE.ImageUtils.loadTexture('materials/earthspec.jpg'),
+    normalMap: THREE.ImageUtils.loadTexture('materials/mars_1k_normal.jpg'),
     specular  : new THREE.Color('grey'),
-    shininess: 5,
+    shininess: 3
     
   });
   marsMesh = new THREE.Mesh( geometry, material);
